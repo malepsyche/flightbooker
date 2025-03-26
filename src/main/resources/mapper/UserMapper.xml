@@ -8,12 +8,12 @@
     </resultMap>
 
     <insert id="addUser">
-        INSERT INTO userTable(user_name)
+        INSERT INTO user_table(user_name)
         VALUES (#{userName})
     </insert>
 
     <select id="getUserById" resultMap="UserDTOMap">
-        SELECT user_name FROM userTable
+        SELECT user_name FROM user_table
         WHERE user_id = #{userId}
     </select>
 </mapper>
