@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @TableName("user_table")
 public class UserDTO {
-    String userName;
+    private String userName;
 }

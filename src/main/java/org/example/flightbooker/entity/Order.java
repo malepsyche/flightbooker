@@ -3,6 +3,6 @@ import lombok.Data;
 
 @Data
 public class Order {
-    int orderId;
-    String orderName;
+    private int orderId;
+    private String orderName;
 }
