@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS flight_booker;
-USE flight_booker;
+CREATE DATABASE IF NOT EXISTS user_db;
+USE user_db;
 
 CREATE TABLE IF NOT EXISTS user_table (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
