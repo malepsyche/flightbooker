@@ -1,10 +1,10 @@
 spring:
   application:
-    name: FlightBooker
+    name: UserApplication
   datasource:
-    url: jdbc:mysql://localhost:54603/flight_booker
+    url: jdbc:mysql://localhost:54603/user_db
     username: user
-    password: assalamalaikum
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 30000

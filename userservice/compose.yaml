@@ -2,9 +2,9 @@ services:
   mysql:
     image: 'mysql:latest'
     environment:
-      - 'MYSQL_DATABASE=flight_booker'
+      - 'MYSQL_DATABASE=user_db'
       - 'MYSQL_USER=user'
-      - 'MYSQL_PASSWORD=assalamalaikum'
+      - 'MYSQL_PASSWORD=password'
       - 'MYSQL_ROOT_PASSWORD=verysecret'
     ports:
       - '54603:3306'
