@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>userservice</module>
+        <module>user</module>
         <module>booking</module>
     </modules>
 
