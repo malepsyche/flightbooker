@@ -17,6 +17,7 @@
 
     <modules>
         <module>userservice</module>
+        <module>bookingservice</module>
     </modules>
 
     <properties>
