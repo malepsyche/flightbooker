@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>userservice</artifactId>
+    <version>1.0.0</version>
 
     <url/>
     <licenses>
