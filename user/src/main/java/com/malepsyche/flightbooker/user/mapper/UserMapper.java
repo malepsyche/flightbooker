@@ -6,5 +6,5 @@ import com.malepsyche.flightbooker.user.dto.UserDTO;
 @Mapper
 public interface UserMapper {
     public void addUser(UserDTO userDTO);
-    public UserDTO getUserById(int userId);
+    public UserDTO getUserById(String userId);
 }

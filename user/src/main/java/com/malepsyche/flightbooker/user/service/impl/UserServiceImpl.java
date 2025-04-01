@@ -20,7 +20,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO getUserById(int userId) {
+    public UserDTO getUserById(String userId) {
         return userMapper.getUserById(userId);
     }
 }

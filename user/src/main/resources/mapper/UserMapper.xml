@@ -22,6 +22,6 @@
 
     <select id="getUserById" resultMap="UserDTOMap">
         SELECT user_name FROM user_table
-        WHERE user_id = #{userId}
+        WHERE user_id = UUID_TO_BIN(#{userId})
     </select>
 </mapper>

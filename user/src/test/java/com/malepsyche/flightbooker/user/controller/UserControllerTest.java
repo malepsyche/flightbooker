@@ -44,7 +44,7 @@ public class UserControllerTest {
 
     @Test
     public void testGetUserById() throws Exception {
-        int userId = 1;
+        String userId = "11f00f0c-e6a5-12ec-9ec9-0242ac150002";
         UserDTO userDTO = new UserDTO();
         userDTO.setUserName("John Doe");
         when(userService.getUserById(userId)).thenReturn(userDTO);
