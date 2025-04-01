@@ -8,8 +8,16 @@
     </resultMap>
 
     <insert id="addUser">
-        INSERT INTO user_table(user_name)
-        VALUES (#{userName})
+        INSERT INTO user_table
+        (
+            user_id,
+            user_name
+        )
+        VALUES
+        (
+            UUID_TO_BIN(UUID(), 1),
+            #{userName}
+        )
     </insert>
 
     <select id="getUserById" resultMap="UserDTOMap">
