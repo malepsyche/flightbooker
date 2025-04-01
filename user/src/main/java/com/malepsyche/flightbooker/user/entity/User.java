@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @TableName("user_table")
 public class User {
-    private int userId;
+    private String userId;
     private String userName;
     @Version
     private int version;
