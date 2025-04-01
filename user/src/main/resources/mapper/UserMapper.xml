@@ -8,20 +8,25 @@
     </resultMap>
 
     <insert id="addUser">
-        INSERT INTO user_table
-        (
+        INSERT INTO user_table(
             user_id,
-            user_name
+            user_name,
+            version
         )
-        VALUES
-        (
+        VALUES(
             UUID_TO_BIN(UUID(), 1),
-            #{userName}
+            #{userName},
+            1
         )
     </insert>
 
     <select id="getUserById" resultMap="UserDTOMap">
-        SELECT user_name FROM user_table
-        WHERE user_id = UUID_TO_BIN(#{userId})
+        SELECT
+            user_name,
+            version
+        FROM
+            user_table
+        WHERE
+            user_id = UUID_TO_BIN(#{userId})
     </select>
 </mapper>
