@@ -17,16 +17,16 @@ jobs:
         service: [user, booking]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Cache Maven packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven${{ hashFiles(format('{0}/pom.xml', matrix.service)) }}
@@ -38,7 +38,7 @@ jobs:
           mvn clean package  
 
       - name: Upload artifact for ${{ matrix.service }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.service }}-artifact
           path: ${{ matrix.service }}/target/*.jar

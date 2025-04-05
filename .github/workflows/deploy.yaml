@@ -21,10 +21,10 @@ jobs:
           fi
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download artifact for ${{ matrix.service }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.service }}-artifact
           path: ${{ matrix.service }}/target
