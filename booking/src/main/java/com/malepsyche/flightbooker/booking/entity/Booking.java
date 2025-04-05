@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 public class Booking {
     private int bookingId;
     private LocalDateTime bookingTime;
-    private Boolean bookingStatus;
     private int userId;
-    private int paymentId;
 }
 

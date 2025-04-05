@@ -9,7 +9,5 @@ import java.time.LocalDateTime;
 @TableName("booking_table")
 public class BookingDTO {
     private LocalDateTime bookingTime;
-    private Boolean bookingStatus;
     private int userId;
-    private int paymentId;
 }
