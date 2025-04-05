@@ -4,4 +4,36 @@
 
 <mapper namespace="com.malepsyche.flightbooker.booking.mapper.BookingMapper">
 
+    <resultMap id="BookingDetailDTOMap" type="com.malepsyche.flightbooker.booking.dto.BookingDetailDTO">
+        <result property="bookingTime" column="booking_time"/>
+        <result property="version" column="version"/>
+        <result property="userID" column="user_id"/>
+    </resultMap>
+
+    <insert id="createBooking">
+        INSERT INTO booking_table
+        (
+            booking_id,
+            version,
+            user_id,
+        )
+        VALUES
+        (
+            UUID_TO_BIN(UUID(), 1),
+            1,
+            #{userId},
+        )
+    </insert>
+
+    <select id="getBookingById" resultMap="BookingDetailDTOMap">
+        SELECT
+            booking_time,
+            version,
+            BIN_TO_UUID(user_id),
+        FROM
+            booking_table
+        WHERE
+            booking_id = UUID_TO_BIN(#{bookingId})
+    </select>
+
 </mapper>
