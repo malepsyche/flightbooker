@@ -8,12 +8,14 @@
     </resultMap>
 
     <insert id="addUser">
-        INSERT INTO user_table(
+        INSERT INTO user_table
+        (
             user_id,
             user_name,
             version
         )
-        VALUES(
+        VALUES
+        (
             UUID_TO_BIN(UUID(), 1),
             #{userName},
             1
