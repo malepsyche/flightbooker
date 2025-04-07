@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: UserApplication
+  datasource:
+    url: jdbc:mysql://localhost:54603/user_db
+    username: user
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

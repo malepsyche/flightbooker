@@ -1,0 +1,91 @@
+name: Deploy Stage
+on:
+  workflow_run:
+    workflows: ["Build Stage"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, macos]
+    strategy:
+      matrix:
+        service: [user, booking]
+    steps:
+      - name: Ensure Minikube is running
+        run: |
+          set -euo pipefail
+          if ! minikube status | grep -q "Running"; then
+            echo "Minikube is not running, starting..."
+            minikube start --driver=hyperkit || { echo "Failed to start Minikube" ; exit 1; }
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifact for ${{ matrix.service }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.service }}-artifact
+          path: ${{ matrix.service }}/target
+
+      - name: Configure Docker to use Minikube
+        run: |
+          set -euo pipefail
+          eval $(minikube docker-env) || { echo "Failed to configure Docker to use Minikube"; exit 1; }
+
+      - name: Build Docker image for ${{ matrix.service }}
+        run: |
+          set -euo pipefail
+          cd ${{ matrix.service }}
+          echo "Building Docker image for ${{ matrix.service }}..."
+          docker build -t ${{ matrix.service }}:${{ github.sha }} . || { echo "Docker build failed for ${{ matrix.service }}"; exit 1; }
+
+      - name: Validate connectivity to Kubernetes Cluster
+        run: |
+          set -euo pipefail
+          echo "Validating Kubernetes cluster connectivity..."
+          kubectl cluster-info || { echo "Failed to get Kubernetes cluster info"; exit 1; }
+          kubectl get nodes || { echo "Failed to get Kubernetes nodes"; exit 1; }
+
+      - name: Deploy ${{ matrix.service }} to Minikube
+        run: |
+          set -euo pipefail
+          echo "Creating deployment manifest for ${{ matrix.service }}..."
+          cat <<EOF > deployment.yaml
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: ${{ matrix.service }}-deployment
+            labels:
+              app: ${{ matrix.service }}
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: ${{ matrix.service }}
+            template:
+              metadata:
+                labels:
+                  app: ${{ matrix.service }}
+              spec:
+                containers:
+                - name: ${{ matrix.service }}
+                  image: ${{ matrix.service }}:${{ github.sha }}
+                  ports:
+                  - containerPort: 8080
+          EOF
+          echo "Applying deployment manifest..."
+          kubectl apply -f deployment.yaml || { echo "Failed to apply deployment manifest for ${{ matrix.service }}"; exit 1; }
+
+      - name: Wait for Deployment Rollout
+        run: |
+          set -euo pipefail
+          echo "Waiting for deployment rollout of ${{ matrix.service }}..."
+          kubectl rollout status deployment/${{ matrix.service }}-deployment || { echo "Deployment rollout failed for ${{ matrix.service }}"; exit 1; }
+
+      - name: Expose Service for ${{ matrix.service }}
+        run: |
+          set -euo pipefail
+          echo "Exposing service for ${{ matrix.service }}..."
+          kubectl expose deployment ${{ matrix.service }}-deployment --type=NodePort --port=8080 || echo "Service already exposed"

@@ -1,0 +1,44 @@
+name: Build Stage
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'user/**'
+      - 'booking/**'
+  pull_request:
+    paths:
+      - 'user/**'
+      - 'booking/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [user, booking]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven${{ hashFiles(format('{0}/pom.xml', matrix.service)) }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Build and Test ${{ matrix.service }}
+        run: |
+          cd ${{ matrix.service }}
+          mvn clean package  
+
+      - name: Upload artifact for ${{ matrix.service }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.service }}-artifact
+          path: ${{ matrix.service }}/target/*.jar
