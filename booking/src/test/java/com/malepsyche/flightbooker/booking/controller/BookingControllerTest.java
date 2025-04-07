@@ -9,14 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,20 +36,17 @@ public class BookingControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @WithMockUser
     public void testCreateBooking() throws Exception {
         String userId = "11f00f0c-e6a5-12ec-9ec9-0242ac150002";
         CreateBookingDTO createBookingDTO = new CreateBookingDTO();
         createBookingDTO.setUserId(userId);
         mockMvc.perform(post("/booking/createBooking")
-                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createBookingDTO)))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser
     public void testGetBookingById() throws Exception {
         String bookingId = "11f00f0c-e6a5-12ec-9ec9-0242ac150002";
         Instant bookingTime = Instant.parse("2023-04-01T12:34:56Z");  // A fixed instant for testing
