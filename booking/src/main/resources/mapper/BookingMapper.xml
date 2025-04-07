@@ -15,13 +15,13 @@
         (
             booking_id,
             version,
-            user_id,
+            user_id
         )
         VALUES
         (
             UUID_TO_BIN(UUID(), 1),
             1,
-            #{userId},
+            #{userId}
         )
     </insert>
 
@@ -29,7 +29,7 @@
         SELECT
             booking_time,
             version,
-            BIN_TO_UUID(user_id),
+            BIN_TO_UUID(user_id)
         FROM
             booking_table
         WHERE
