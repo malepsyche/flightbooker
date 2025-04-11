@@ -3,7 +3,10 @@ import com.malepsyche.flightbooker.user.dto.UserDTO;
 import com.malepsyche.flightbooker.user.mapper.UserMapper;
 import com.malepsyche.flightbooker.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -15,12 +18,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void addUser(UserDTO userDTO) {
+    @Async
+    public CompletableFuture<Void> addUser(UserDTO userDTO) {
         userMapper.addUser(userDTO);
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public UserDTO getUserById(String userId) {
-        return userMapper.getUserById(userId);
+    @Async
+    public CompletableFuture<UserDTO> getUserById(String userId) {
+        UserDTO userDTO = userMapper.getUserById(userId);
+        return CompletableFuture.completedFuture(userDTO);
     }
 }

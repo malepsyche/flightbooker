@@ -12,10 +12,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.springframework.test.web.servlet.MvcResult;
+import java.util.concurrent.CompletableFuture;
 
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -47,8 +47,11 @@ public class UserControllerTest {
         String userId = "11f00f0c-e6a5-12ec-9ec9-0242ac150002";
         UserDTO userDTO = new UserDTO();
         userDTO.setUserName("John Doe");
-        when(userService.getUserById(userId)).thenReturn(userDTO);
-        mockMvc.perform(get("/user/getUserById/" + userId))
+        when(userService.getUserById(userId)).thenReturn(CompletableFuture.completedFuture(userDTO));
+        MvcResult result = mockMvc.perform(get("/user/getUserById/" + userId))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+        mockMvc.perform(asyncDispatch(result))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userName").value("John Doe"));
     }

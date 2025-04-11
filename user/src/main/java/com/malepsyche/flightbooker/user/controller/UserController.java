@@ -5,6 +5,8 @@ import com.malepsyche.flightbooker.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -16,12 +18,12 @@ public class UserController {
     }
 
     @PostMapping("addUser")
-    public void addUser(@RequestBody UserDTO userDTO) {
-        userService.addUser(userDTO);
+    public CompletableFuture<Void> addUser(@RequestBody UserDTO userDTO) {
+        return userService.addUser(userDTO);
     }
 
     @GetMapping("getUserById/{userId}")
-    public UserDTO getUserById(@PathVariable String userId) {
+    public CompletableFuture<UserDTO> getUserById(@PathVariable String userId) {
         return userService.getUserById(userId);
     }
 }
